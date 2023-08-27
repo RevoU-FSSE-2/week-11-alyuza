@@ -3,7 +3,7 @@
 # Project Milestone 2
 ## Flowchart
 
-<img src="img/flowchart.png" alt="flowchat image" width="800px">
+<img src="img/flowchart.png" alt="flowchat image" width="850px">
 
 ## Tools & Ingredients
 
