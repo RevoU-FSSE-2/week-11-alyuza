@@ -5,7 +5,7 @@ const { JWT_SIGN } = require('../config/jwt.js')
 // ========================== REGISTER =========================
 const validRoles = ["user"]
 const register = async (req, res) => {
-    const { username, password, role } = req.body
+    const { fullName, jobPosition, department, salary, joinDate, username, password, role } = req.body
     try {
         if (!username || username.trim() === "" || !/^[a-zA-Z0-9.]+$/.test(username)) {
             res.status(400).json({ message: "Username can't be blank and doesn't allow to enter of any special character except dot (.)" });
@@ -24,10 +24,10 @@ const register = async (req, res) => {
             throw new Error('Sorry, username already exists')
         }
         const hashedPassword = await bcrypt.hash(password, 10) //hashedpass : password yg sudah di encrypted
-        const newUser = await req.db.collection('users').insertOne({ username, password: hashedPassword, role })
+        const newUser = await req.db.collection('users').insertOne({ fullName, jobPosition, department, salary, joinDate, username, password: hashedPassword, role })
         res.status(200).json({
             message: `User ${username} successfully registered`,
-            data: newUser,
+            ID: newUser
         })
     } catch (error) {
         res.status(400).json({ error: error.message })
