@@ -9,7 +9,6 @@
 
 - Node.js & Express.js
 - Swagger UI
-- Postman
 - MongoDB
 
 ## Features
@@ -23,10 +22,13 @@
 ```
 ```
 {
-  "username": "yuza.user",
-  "password": "yuza1234"
+  "username": "alyuza",
+  "password": "user1234"
   "role": "user"
 }
 ```
+## MongoDB
+<img src="img/img1.png" alt="flowchart image" width="850px">
+
 ## Contact Person
 [![Linkedin Badge](https://img.shields.io/badge/-Alyuza_Satrio_Prayogo-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/alyuzasp/) [![Youtube Badge](https://img.shields.io/badge/-Alyuza_Satrio_Prayogo-darkred?style=flat-square&logo=youtube&logoColor=white)](https://www.youtube.com/@alyuza/about) [![Instagram Badge](https://img.shields.io/badge/-Alyuza_Satrio_Prayogo-black?style=flat-square&logo=instagram&logoColor=white)](https://www.instagram.com/alyuuza/)
