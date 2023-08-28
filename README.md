@@ -11,7 +11,6 @@
 - Swagger UI
 - MongoDB
 
-## Features
 **Available Account**
 ```
 {
