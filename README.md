@@ -8,11 +8,8 @@
 ## Tools & Ingredients
 
 - Node.js & Express.js
-- Swagger UI
-- Postman
 - MongoDB
 
-## Features
 **Available Account**
 ```
 {
