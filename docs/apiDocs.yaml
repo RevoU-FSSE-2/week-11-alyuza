@@ -3,109 +3,31 @@ info:
   version: 1.0.0
   title: Human Resource Development Application
 servers:
-  - url: https://localhost:3000
+  - url: http://localhost:3000
     description: 'Development server'
 
 components:
   securitySchemes:
-    bearer:
+    bearer_auth:
       type: http
       scheme: bearer
       bearerFormat: JWT
       description: 'Bearer with JWT Token'
 
 paths:
-  /v1/user/changePassword/{userId}:
-    patch:
-      summary: Change password
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                password:
-                  type: string
-      responses:
-        '200':
-          description: Success
-  /v1/user/viewProfile/{userId}:
-    get:
-      summary: View profile
-      responses:
-        '200':
-          description: Success
-  /v1/admin/register:
-    post:
-      summary: Add employee
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                fullName:
-                  type: string
-                jobPosition:
-                  type: string
-                department:
-                  type: string
-                salary:
-                  type: number
-                username:
-                  type: string
-                password:
-                  type: string
-                role:
-                  type: string
-      responses:
-        '200':
-          description: Success
-  /v1/admin/getAllUsers:
-    get:
-      summary: Get all employee data
-      responses:
-        '200':
-          description: Success
-  /v1/admin/getUser/{userId}:
-    get:
-      summary: Get data by id
-      responses:
-        '200':
-          description: Success
-  /v1/admin/update/{userId}:
-    put:
-      summary: Update job / salary
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                salary:
-                  type: number
-                jobPosition:
-                  type: string
-      responses:
-        '200':
-          description: Success
-  /v1/admin/delete/{userId}:
-    delete:
-      summary: Delete user
-      responses:
-        '200':
-          description: Success
   /:
     get:
+      tags:
+       - Home
       summary: Home
       responses:
         '200':
           description: Success
+
   /v1/auth/login:
     post:
+      tags:
+        - Home
       summary: Login
       requestBody:
         required: true
@@ -116,8 +38,137 @@ paths:
               properties:
                 username:
                   type: string
+                  example: hrd.admin
                 password:
+                  type: string
+                  example: admin1234
+      responses:
+        '200':
+          description: Success
+
+  /v1/user/changePassword/{userId}:
+    patch:
+      tags:
+       - Employee
+      security:
+        - bearer_auth: []
+      summary: Change password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: newpassword123
+      responses:
+        '200':
+          description: Success
+
+  /v1/user/viewProfile/{userId}:
+    get:
+      tags:
+       - Employee
+      security:
+        - bearer_auth: []
+      summary: View own profile
+      responses:
+        '200':
+          description: Success
+
+  /v1/admin/register:
+    post:
+      tags:
+       - Administrator
+      security:
+        - bearer_auth: []
+      summary: Add employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                  example: Bamas Angkasa
+                jobPosition:
+                  type: string
+                  example: Tech Leader
+                department:
+                  type: string
+                  example: Tech
+                salary:
+                  type: number
+                  example: 18000000
+                username:
+                  type: string
+                  example: bamasangkasa
+                password:
+                  type: string
+                  example: user1234
+                role:
+                  type: string
+                  example: user
+      responses:
+        '200':
+          description: Success
+
+  /v1/admin/getAllUsers:
+    get:
+      tags:
+       - Administrator
+      security:
+        - bearer_auth: []
+      summary: Get all employee data
+      responses:
+        '200':
+          description: Success
+
+  /v1/admin/getUser/{userId}:
+    get:
+      tags:
+       - Administrator
+      security:
+        - bearer_auth: []
+      summary: Get data by id
+      responses:
+        '200':
+          description: Success
+
+  /v1/admin/update/{userId}:
+    put:
+      tags:
+       - Administrator
+      security:
+        - bearer_auth: []
+      summary: Update job or salary
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                salary:
+                  type: number
+                jobPosition:
                   type: string
       responses:
         '200':
           description: Success
+          
+  /v1/admin/delete/{userId}:
+    delete:
+      tags:
+       - Administrator
+      security:
+        - bearer_auth: []
+      summary: Soft delete employee
+      responses:
+        '200':
+          description: Success
+
