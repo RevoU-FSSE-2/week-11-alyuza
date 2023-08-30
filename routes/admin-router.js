@@ -1,14 +1,12 @@
 const { Router } = require('express');
 const adminRouter = Router();
-const { getAllUsers, getUser, updateUser, deleteUser } = require('../service/admin-service');
-const authenticationMiddleware = require('../middleware/authentication-middleware');
+const { getAllUsers, getUser, register, updateUser, deleteUser } = require('../service/admin-service');
 const { adminAuthMiddleware } = require('../middleware/authorization-middleware');
-const { register } = require('../service/auth-service');
 
-adminRouter.get('/getAllUsers', authenticationMiddleware, adminAuthMiddleware, getAllUsers)
-adminRouter.get('/getUser/:id', authenticationMiddleware, adminAuthMiddleware, getUser)
-adminRouter.post('/register', authenticationMiddleware, adminAuthMiddleware, register)
-adminRouter.put('/update/:id', authenticationMiddleware, adminAuthMiddleware, updateUser)
-adminRouter.delete('/delete/:id', authenticationMiddleware, adminAuthMiddleware, deleteUser)
+adminRouter.get('/getAllUsers', adminAuthMiddleware, getAllUsers)
+adminRouter.get('/getUser/:id', adminAuthMiddleware, getUser)
+adminRouter.post('/register', adminAuthMiddleware, register)
+adminRouter.put('/update/:id', adminAuthMiddleware, updateUser)
+adminRouter.delete('/delete/:id', adminAuthMiddleware, deleteUser)
 
 module.exports = { adminRouter }
