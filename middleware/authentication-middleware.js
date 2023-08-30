@@ -4,7 +4,7 @@ const { JWT_SIGN } = require('../config/jwt.js')
 const authenticationMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization
   if (!authHeader) {
-    res.status(401).json({ error: 'Unauthorized' })
+    res.status(401).json({ error: 'Sorry, your account unauthorized' })
   } else {
     const token = authHeader.split(' ')[1]
 
