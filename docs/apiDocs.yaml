@@ -15,15 +15,6 @@ components:
       description: 'Bearer with JWT Token'
 
 paths:
-  /:
-    get:
-      tags:
-       - Home
-      summary: Home
-      responses:
-        '200':
-          description: Success
-
   /v1/auth/login:
     post:
       tags:
@@ -46,6 +37,17 @@ paths:
         '200':
           description: Success
 
+  /v1/user/viewProfile/{userId}:
+    get:
+      tags:
+       - Employee
+      security:
+        - bearer_auth: []
+      summary: View own profile
+      responses:
+        '200':
+          description: Success
+
   /v1/user/changePassword/{userId}:
     patch:
       tags:
@@ -62,18 +64,10 @@ paths:
               properties:
                 password:
                   type: string
-                  example: newpassword123
-      responses:
-        '200':
-          description: Success
-
-  /v1/user/viewProfile/{userId}:
-    get:
-      tags:
-       - Employee
-      security:
-        - bearer_auth: []
-      summary: View own profile
+                  example: newpassword1234
+                repeatPassword:
+                  type: string
+                  example: newpassword1234
       responses:
         '200':
           description: Success
@@ -94,20 +88,23 @@ paths:
               properties:
                 fullName:
                   type: string
-                  example: Bamas Angkasa
+                  example: Alyuza Satrio Prayogo
                 jobPosition:
                   type: string
-                  example: Tech Leader
+                  example: Junior Software Engineer
                 department:
                   type: string
                   example: Tech
                 salary:
                   type: number
-                  example: 18000000
+                  example: 8500000
                 username:
                   type: string
-                  example: bamasangkasa
+                  example: alyuza
                 password:
+                  type: string
+                  example: user1234
+                repeatPassword:
                   type: string
                   example: user1234
                 role:
@@ -135,6 +132,13 @@ paths:
       security:
         - bearer_auth: []
       summary: Get data by id
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          example: 64edd0945e36f401709dd77e
       responses:
         '200':
           description: Success
@@ -145,7 +149,14 @@ paths:
        - Administrator
       security:
         - bearer_auth: []
-      summary: Update job or salary
+      summary: Update job and/or salary
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          example: 64edd0945e36f401709dd77e
       requestBody:
         required: true
         content:
@@ -155,8 +166,10 @@ paths:
               properties:
                 salary:
                   type: number
+                  example: 24000000
                 jobPosition:
                   type: string
+                  example: Manager
       responses:
         '200':
           description: Success
@@ -168,6 +181,13 @@ paths:
       security:
         - bearer_auth: []
       summary: Soft delete employee
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          example: 64edd0945e36f401709dd77e
       responses:
         '200':
           description: Success
