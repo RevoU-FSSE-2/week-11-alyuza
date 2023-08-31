@@ -22,11 +22,9 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(databaseMiddleware);
 
-app.get('/', (req, res) => { res.send('PROJECT MILESTONE 2 - ALYUZA SATRIO PRAYOGO') });
-
 app.use('/v1/auth', authRouter);
-app.use('/v1/admin', authenticationMiddleware, adminRouter);
 app.use('/v1/user', authenticationMiddleware, userRouter);
+app.use('/v1/admin', authenticationMiddleware, adminRouter);
 
 app.listen(port, () => {
     console.log(`Running on localhost: ${port}`);
