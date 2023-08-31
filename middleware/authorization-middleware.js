@@ -5,7 +5,7 @@ const { JWT_SIGN } = require('../config/jwt.js')
 const adminAuthMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization
   if (!authHeader) {
-    res.status(401).json({ error: `Sorry, role: 'Employees' can't do anything in the 'Admin' section.` })
+    res.status(401).json({ error: `Sorry you don't have permission in this section.` })
   } else {
     const token = authHeader.split(' ')[1]
     try {
@@ -13,7 +13,7 @@ const adminAuthMiddleware = (req, res, next) => {
       if (decodedToken.role.toLowerCase() === 'admin') {
         next()
       } else {
-        res.status(401).json({ error: `Sorry, role: 'Employees' can't do anything in the 'Admin' section.` })
+        res.status(401).json({ error: `Sorry you don't have permission in this section.` })
       }
     } catch (error) {
       res.status(400).json({ error: error.message })
@@ -31,6 +31,7 @@ const userAuthMiddleware = (req, res, next) => {
     try {
       const decodedToken = jwt.verify(token, JWT_SIGN)
       if (decodedToken.role.toLowerCase() === 'user') {
+        res.locals.username = decodedToken.username
         next()
       } else {
         res.status(401).json({ error: `Sorry, role: 'Admin' can't do anything in the 'Employees' section.` })
@@ -43,5 +44,6 @@ const userAuthMiddleware = (req, res, next) => {
 
 module.exports = {
   adminAuthMiddleware,
-  userAuthMiddleware
+  userAuthMiddleware,
+
 }
