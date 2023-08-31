@@ -7,7 +7,6 @@ const authenticationMiddleware = (req, res, next) => {
     res.status(401).json({ error: 'Sorry, your account unauthorized' })
   } else {
     const token = authHeader.split(' ')[1]
-
     try {
       const decodedToken = jwt.verify(token, JWT_SIGN)
       console.log(decodedToken, 'Token has been decoded');
@@ -17,5 +16,6 @@ const authenticationMiddleware = (req, res, next) => {
     }
   }
 }
+
 
 module.exports = authenticationMiddleware
