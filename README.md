@@ -3,14 +3,49 @@
 ---
 # Human Resource Development Application
 An HRD application designed to streamline employee management. This application allows 'Administrators' to register new employee, read all employee data profiles, update their salary / job position, and can soft delete employee profile for enhanced data control.
+
 For Employees 'user', they can log in using their provided username and password, granting them access to their personal profiles only. They can view and modify their profiles, including the ability to update passwords.
+
 With Role-Based Access Control (RBAC), this HR application empowers organizations to manage their workforce effectively, ensuring data security and efficient employee management.
 
 ---
 
-## Flowchart
+## Main Flowchart
 
-<img src="img/flow.png" alt="flowchart image" width="850px">
+<img src="img/mainFlowchart.png" alt="flowchart image" width="850px">
+
+---
+
+## User Allowance Flowchart
+
+<img src="img/userAllowance.png" alt="flowchart image" width="850px">
+
+1. Encode username using JWT in Authentication.
+`const token = jwt.sign({ username: user.username }, JWT_SIGN)`
+
+2. Decode JWT, and username will be displayed in Authorization.
+`const decodedToken = jwt.verify(token, JWT_SIGN)`
+`console.log(decodedToken, 'Token has been decoded');`
+3. Use `res.locals.username` to automatically insert data into findOne method.
+```const viewProfile = async (req, res) => {
+  const usernameInput = res.locals.username;
+  try {
+    // find data by username in mongoDB server
+    const user = await req.db.collection('users').findOne({
+      username: usernameInput,
+      is_deleted: { $exists: false }
+    });
+    if (user) {
+      return res.status(200).json({ message: `Success get own profile.`,
+      data: user });
+    } else {
+      return res.status(404).json({ message: `User not found or deleted.` });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+```
 
 ---
 ## Tools & Ingredients
@@ -20,17 +55,18 @@ With Role-Based Access Control (RBAC), this HR application empowers organization
 - MongoDB Atlas -> Database server
 - MongoDB Compass -> Database monitor
 - Postman -> API development
+- DrawerIO -> Create a flowchart
 
 ---
 ## Features
 ### Admin Features
 **Add New Employee**
 
-- **Description:** Allows the admin to add a new employee to the system.
+- **Description:** Allows admin to add a new employee to the system.
 - **Steps:**
   1. Log in as an admin.
   2. Navigate to the "Add Employee" section.
-  3. Fill in the employee details such as fullname, department, job position, salary, username, password.
+  3. Fill in the employee details such as fullname, department, job position, salary, username and password.
   4. Click "Add" to save the employee information.
 
 **List All Employees**
@@ -68,6 +104,7 @@ With Role-Based Access Control (RBAC), this HR application empowers organization
   3. Locate the employee to be soft-deleted.
   4. Choose the "Soft Delete" option to deactivate the employee.
 ---
+
 ### Employee Features
 
 **Change Password**
@@ -76,7 +113,7 @@ With Role-Based Access Control (RBAC), this HR application empowers organization
 - **Steps:**
   1. Log in as an employee.
   2. Navigate to the "Change Password" section in the profile settings.
-  3. Enter the current password and the new password.
+  3. Enter the new password and repeat password.
   4. Click "Change Password" to save the new password.
 
 **View Own Profile**
@@ -85,7 +122,7 @@ With Role-Based Access Control (RBAC), this HR application empowers organization
 - **Steps:**
   1. Log in as an employee.
   2. Access the "Profile" section.
-  3. View personal details such as name, contact, job position, and salary.
+  3. View personal details such as name, job position, and salary.
 
 **Restriction on Viewing Other Profiles**
 
@@ -108,10 +145,15 @@ With Role-Based Access Control (RBAC), this HR application empowers organization
   "role": "user"
 }
 ```
+---
+
+## Request & Response
+
+
 
 ---
 
-## MongoDB
+## Database in MongoDB Server
 <img src="img/img1.png" alt="flowchart image" width="850px">
 
 ---
@@ -121,5 +163,9 @@ With Role-Based Access Control (RBAC), this HR application empowers organization
 
 ---
 
+## Deployment
+Deployment link here 
+
+---
 ## Contact Person
 [![Linkedin Badge](https://img.shields.io/badge/-Alyuza_Satrio_Prayogo-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/alyuzasp/) [![Youtube Badge](https://img.shields.io/badge/-Alyuza_Satrio_Prayogo-darkred?style=flat-square&logo=youtube&logoColor=white)](https://www.youtube.com/@alyuza/about) [![Instagram Badge](https://img.shields.io/badge/-Alyuza_Satrio_Prayogo-black?style=flat-square&logo=instagram&logoColor=white)](https://www.instagram.com/alyuuza/)
