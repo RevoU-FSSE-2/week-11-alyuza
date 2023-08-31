@@ -6,30 +6,30 @@ const getAllUsers = async (req, res) => {
   try {
     const users = await req.db.collection('users').find({ is_deleted: { $exists: false } }).toArray();
     res.status(200).json({
-      message: 'Successfully get all employee data',
+      message: 'Successfully get all employee data.',
       data: users
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 }
 
 // Get user profile by id
 const getUser = async (req, res) => {
   try {
-    const userID = req.params.id; // Extract user ID from the request parameters
+    const userID = req.params.id;
     const user = await req.db.collection('users').findOne({
       _id: new ObjectId(userID),
       is_deleted: { $exists: false }
     });
     if (user) {
       res.status(200).json({
-        message: `Success get user's data`,
+        message: `Success get employee data by Id.`,
         data: user
       });
     } else {
       res.status(404).json({
-        message: `User with ID: ${userID} not found`
+        message: `User with ID: ${userID} not found.`
       });
     }
   } catch (error) {
@@ -37,26 +37,32 @@ const getUser = async (req, res) => {
   }
 }
 
-// ========================== REGISTER =========================
+// Register or add employee
 const validRoles = ["user"];
 const register = async (req, res) => {
-  const { fullName, jobPosition, department, salary, username, password, role } = req.body;
+  const { fullName, jobPosition, department, salary, username, password, repeatPassword, role } = req.body;
   try {
-    if (!username || username.trim() === " " || !/^[a-zA-Z0-9.]+$/.test(username)) {
-      res.status(400).json({ message: "Username can't be blank and doesn't allow to enter of any special character except dot (.)" });
-      return;
+    // Check if username is not empty, no whitespace and alphanumeric only except dot.
+    if (!username || username.trim() === "" || !/^[a-zA-Z0-9.]+$/.test(username)) {
+      return res.status(400).json({ message: "Username can't be blank and doesn't allow to enter of any special character except dot (.)." });
     }
+    // Check if password is not empy and minimum length is 8.
     if (!password || password.length < 8) {
-      res.status(400).json({ message: "Password must be at least 8 characters long" });
-      return;
+      return res.status(400).json({ message: "Password must be at least 8 characters long." });
     }
+    // Check if role is 'user'.
     if (!validRoles.includes(role)) {
-      throw new Error("Invalid role, can register with role 'user' only");
+      return res.status(400).json({ message: "Invalid role, can register with role 'user' only." });
+    }
+    // Check if the password and repeat password match.
+    if (password !== repeatPassword) {
+      return res.status(400).json({ message: 'Passwords do not match.' });
     }
     const user = await req.db.collection('users').findOne({ username });
     if (user) {
-      throw new Error('Sorry, username already exists');
+      return res.status(400).json({ message: 'Sorry, username already exists.' });
     }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
@@ -70,8 +76,8 @@ const register = async (req, res) => {
       password: hashedPassword, // password yg di encrypted
       role
     });
-    res.status(200).json({
-      message: `User ${username} successfully registered`,
+    res.status(201).json({
+      message: `User ${username} successfully registered.`,
       ID: newUser.insertedId
     });
   } catch (error) {
@@ -93,14 +99,13 @@ const updateUser = async (req, res) => {
       { $set: { salary, jobPosition } } // Include the existing username
     );
     res.status(200).json({
-      message: 'Success update Employee data',
+      message: 'Update employee data success.',
       data: userUpdate
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
-
 
 // Soft Delete user data
 const deleteUser = async (req, res) => {
@@ -126,7 +131,7 @@ const deleteUser = async (req, res) => {
       data: user
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
