@@ -10,23 +10,40 @@ With Role-Based Access Control (RBAC), this HR application empowers organization
 
 ---
 
-## Main Flowchart
+## Tools & Ingredients
 
-<img src="img/mainFlowchart.png" alt="flowchart image" width="850px">
+- Node.js & Express.js
+- Swagger UI -> API documentation
+- MongoDB Atlas -> Database server
+- MongoDB Compass -> Database monitor
+- Postman -> API development
+- DrawerIO -> Create a flowchart
 
 ---
 
-## User Allowance Flowchart
+## Main Flowchart
 
-<img src="img/userAllowance.png" alt="flowchart image" width="850px">
+<img src="img/mainFlowchart.png" alt="main flowchart" width="850px">
+
+---
+
+## User Access
+
+The way to prevent employees from accessing other employee profiles is to enter the value username/id (login) = value username/id in the (View Profile) or (Change Password) methods. Then employees cannot access other employee profiles.
+
+<img src="img/userAccess.png" alt="user access flowchart" width="850px">
 
 1. Encode username using JWT in Authentication.
+
 `const token = jwt.sign({ username: user.username }, JWT_SIGN)`
 
 2. Decode JWT, and username will be displayed in Authorization.
+
 `const decodedToken = jwt.verify(token, JWT_SIGN)`
 `console.log(decodedToken, 'Token has been decoded');`
-3. Use `res.locals.username` to automatically insert data into findOne method.
+
+3. Use `res.locals.username` to automatically insert data into findOne method. There is no need for input based on ID/username so employees cannot view other employee profiles based on ID/username.
+
 ```const viewProfile = async (req, res) => {
   const usernameInput = res.locals.username;
   try {
@@ -48,16 +65,43 @@ With Role-Based Access Control (RBAC), this HR application empowers organization
 ```
 
 ---
-## Tools & Ingredients
 
-- Node.js & Express.js
-- Swagger UI -> API documentation
-- MongoDB Atlas -> Database server
-- MongoDB Compass -> Database monitor
-- Postman -> API development
-- DrawerIO -> Create a flowchart
+## Admin Access
+
+To restrict admin and user access, you can use Authorization with 'Role Based Access Control'.
+
+In this case there are only 2 roles, Admin and User/Employee. Admin can access user data through the `Admin Area` using `Get all user data` or `Get data by ID`, but admin do not have permission to enter the `User Area` to do `Change Password` or `View Profile`.
+
+<img src="img/adminAccess.png" alt="admin access flowchart" width="850px">
+
+1. `Login` -> `Username` and `Role` will be encoded/sign in JWT, the output of this encoding is random and requires a secret key to match or unlock the code. The output of the code below is `token`.
+
+```
+const token = jwt.sign({ username: user.username, role: user.role }, JWT_SIGN)
+    res.status(200).json({
+      message: 'Successfully logged in',
+      data: token
+    });
+```
+
+2. `Authorization` -> `JWT_SIGN` is `secret key` to open/match the `token`, you need to have the same secret key that was used to sign-in in `Login`.
+
+`jwt.verify(token, JWT_SIGN)` is a function used to verify the integrity and authenticity of a JWT by checking its signature against a secret key. If the signature matches, it means the JWT is valid and can be trusted, and you can then proceed to use the information contained in the JWT payload. If the signature does not match, the JWT is invalid, and you should not trust its contents.
+
+```
+const decodedToken = jwt.verify(token, JWT_SIGN)
+      if (decodedToken.role.toLowerCase() === 'user') {
+        next()
+      } else {
+        res.status(401).json({ error: `Sorry you don't have permission in 'Employee' section.` })
+      }
+```
+
+When the role is an `user` it will be allowed to access this section.
+When the role is other than `user`, example: `admin`, it is not permitted to access this section.
 
 ---
+
 ## Features
 ### Admin Features
 **Add New Employee**
@@ -147,24 +191,33 @@ With Role-Based Access Control (RBAC), this HR application empowers organization
 ```
 ---
 
-## Request & Response
+## API Endpoint | Request & Response
 
-
+| Endpoint | Method | Description | Request Body | Response |
+|---------|--------|--------|--------|--------|
+| `/v1/auth/login` | POST | Login | `"username": string `<br>` "password": string` | `JWT Token` |
+| `/v1/user/viewProfile/{userId}` | GET | View profile | Automatically input Username from JWT | `"_id": string `<br>` "fullName": string `<br>` "jobPosition": string `<br>` "department": string `<br>` "salary": integer `<br>` "joinDate": date `<br>` "username": string `<br>` "password": hashed password `<br>` "role": string` |
+| `/v1/user/changePassword/{userId}` | PATCH | Change password | `"password": string `<br>` "repeatPassword": string` | `New Password` |
+| `/v1/admin/register` | POST | Add new employee | `"fullName": string `<br>` "jobPosition": string `<br>` "department": string `<br>` "salary": integer `<br>` "username": string `<br>` "password": string `<br>` "repeatPassword": string `<br>` "role": string` | `Input data to MongoDB Atlas`|
+| `/v1/admin/getAllUsers` | GET | Get all employee data | N/A | `List all employee data` |
+| `/v1/admin/getUser/{userId}` | GET | Get employee data by ID | `"UserID" : string` | `Get data from 1 employee by ID` |
+| `/v1/admin/update/{userId}` | PUT | Update employee job and/or salary | `"salary": integer `<br>` "jobPosition": string` | `New Position` <br>and/or<br> `New Salary` |
+| `/v1/admin/delete/{userId}` | DELETE | Soft delete employee | `"UserID" : string` | `UserID = isDeleted_true` |
 
 ---
 
 ## Database in MongoDB Server
-<img src="img/img1.png" alt="flowchart image" width="850px">
+<img src="img/mongoDB.png" alt="mongoDB server" width="850px">
 
 ---
 
 ## Swagger UI
-<img src="img/img2.png" alt="swagger image" width="850px">
+<img src="img/swaggerUI.png" alt="swaggerUI" width="400px">
 
 ---
 
 ## Deployment
-Deployment link here 
+Deployment link here [https://erin-beautiful-peacock.cyclic.app/api-docs/#/](https://erin-beautiful-peacock.cyclic.app/api-docs/#/)
 
 ---
 ## Contact Person
