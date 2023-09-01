@@ -11,10 +11,17 @@ info:
 
     ```
     Available Account
-    "username" : "hrd.admin",
-    "password" : "admin1234",
-    "role" : "admin"
+
+    username: hrd.admin
+    password: admin123
+    role: admin
+
+    username: hrd.admin
+    password: admin1234
+    role: user
     ```
+    Example pada input Login sudah berisikan username & password Admin, untuk mempermudah penilaian.
+    
     ---
 
 servers:
