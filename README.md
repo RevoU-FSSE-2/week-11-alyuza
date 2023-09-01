@@ -195,14 +195,14 @@ When the role is other than `user`, example: `admin`, it is not permitted to acc
 
 | Endpoint | Method | Description | Request Body | Response |
 |---------|--------|--------|--------|--------|
-| `/v1/auth/login` | POST | Login | `"username": string `<br>` "password": string` | `JWT Token` |
-| `/v1/user/viewProfile/:id` | GET | View profile | Automatically input Username from JWT | `"_id": string `<br>` "fullName": string `<br>` "jobPosition": string `<br>` "department": string `<br>` "salary": integer `<br>` "joinDate": date `<br>` "username": string `<br>` "password": hashed password `<br>` "role": string` |
-| `/v1/user/changePassword/:id` | PATCH | Change password | `"password": string `<br>` "repeatPassword": string` | `New Password` |
-| `/v1/admin/register` | POST | Add new employee | `"fullName": string `<br>` "jobPosition": string `<br>` "department": string `<br>` "salary": integer `<br>` "username": string `<br>` "password": string `<br>` "repeatPassword": string `<br>` "role": string` | `Input data to MongoDB Atlas`|
+| `/v1/auth/login` | POST | Login | `username:string`<br>`password:string` | `JWT Token` |
+| `/v1/user/viewProfile/:id` | GET | View profile | Automatically input Username from JWT | `_id:string`<br>`fullName:string`<br>`jobPosition:string`<br>`department:string`<br>`salary:integer`<br>`joinDate:date`<br>`username:string`<br>`password:hashedPassword`<br>`role:string` |
+| `/v1/user/changePassword/:id` | PATCH | Change password | `password:string`<br>`repeatPassword:string` | `New Password` |
+| `/v1/admin/register` | POST | Add new employee | `fullName:string`<br>`jobPosition:string`<br>`department:string`<br>`salary:integer`<br>`username:string`<br>`password:string`<br>`repeatPassword:string`<br>`role:string` | `Input data to MongoDB Atlas`|
 | `/v1/admin/getAllUsers` | GET | Get all employee data | N/A | `List all employee data` |
-| `/v1/admin/getUser/:id` | GET | Get employee data by ID | `"UserID" : string` | `Get data from 1 employee by ID` |
-| `/v1/admin/update/:id` | PUT | Update employee job and/or salary | `"salary": integer `<br>` "jobPosition": string` | `New Position` <br>and/or<br> `New Salary` |
-| `/v1/admin/delete/:id` | DELETE | Soft delete employee | `"UserID" : string` | `UserID = isDeleted_true` |
+| `/v1/admin/getUser/:id` | GET | Get employee data by ID | `UserID:string` | `Get data from 1 employee by ID` |
+| `/v1/admin/update/:id` | PUT | Update employee job and/or salary | `salary:integer`<br>`jobPosition:string` | `New Position` <br>and/or<br> `New Salary` |
+| `/v1/admin/delete/:id` | DELETE | Soft delete employee | `UserID:string` | `UserID = isDeleted_true` |
 
 ---
 
